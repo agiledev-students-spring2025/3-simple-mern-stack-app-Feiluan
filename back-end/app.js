@@ -11,6 +11,7 @@ app.use(cors()) // allow cross-origin resource sharing
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+app.use(express.static('models'))
 
 // connect to database
 mongoose
@@ -21,6 +22,24 @@ mongoose
 // load the dataabase models we want to deal with
 const { Message } = require('./models/Message')
 const { User } = require('./models/User')
+
+
+app.get("/about", async(req, res) => {
+  try{
+    res.json({
+      name: "About Us",
+      description: "We am currently Computer Science student and we are willing to develop more userful things. We hope to create practical software that everyone likes and serve human life.",
+      imageUrl: "http://localhost:5002/tingting.png"   
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(400).json({
+      error: err,
+      status: 'failed to load messages',
+    })
+  }
+  
+})
 
 // a route to handle fetching all messages
 app.get('/messages', async (req, res) => {
